@@ -11,8 +11,16 @@ import (
 	"github.com/afurgapil/library-management-system/pkg/entities"
 )
 
-
-
+// AddEmployee godoc
+// @Summary Add a new employee
+// @Description add by json employee
+// @Tags employee
+// @Accept  json
+// @Produce  json
+// @Param   employee  body      entities.Employee   true  "Add Employee"
+// @Success 201 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Router /employee/add [post]
 func AddEmployee(service employee.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var requestBody entities.Employee
@@ -36,7 +44,17 @@ func AddEmployee(service employee.Service) fiber.Handler {
 	}
 }
 
-
+// SignIn godoc
+// @Summary Sign in an employee
+// @Description Sign in an employee with email and password
+// @Tags employee
+// @Accept  json
+// @Produce  json
+// @Param   signin  body      object{email=string,password=string}   true  "Sign In"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 401 {object} map[string]interface{}
+// @Router /employee/signin [post]
 func SignIn(service employee.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var request struct {
@@ -65,6 +83,17 @@ func SignIn(service employee.Service) fiber.Handler {
 	}
 }
 
+// DeleteEmployee godoc
+// @Summary Delete an employee
+// @Description Delete an employee by ID
+// @Tags employee
+// @Accept  json
+// @Produce  json
+// @Param   id   path      string   true  "Employee ID"
+// @Success 204 "No Content"
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /employee/delete/{id} [delete]
 func DeleteEmployee(service employee.Service) fiber.Handler  {
 	return func(c *fiber.Ctx) error {
 		employeeID := c.Params("id")

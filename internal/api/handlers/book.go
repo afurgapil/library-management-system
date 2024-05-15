@@ -11,8 +11,16 @@ import (
 	"github.com/afurgapil/library-management-system/pkg/entities"
 )
 
-
-
+// AddBook godoc
+// @Summary Add a new book
+// @Description add by json book
+// @Tags book
+// @Accept  json
+// @Produce  json
+// @Param   book  body      entities.Book   true  "Add Book"
+// @Success 201 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Router /book/add [post]
 func AddBook(service book.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var requestBody entities.Book
@@ -36,6 +44,17 @@ func AddBook(service book.Service) fiber.Handler {
 	}
 }
 
+// DeleteEmployee godoc
+// @Summary Delete a book
+// @Description Delete a book by ID
+// @Tags book
+// @Accept  json
+// @Produce  json
+// @Param   id   path      string   true  "Book ID"
+// @Success 204 "No Content"
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /book/delete/{id} [delete]
 func DeleteBook(service book.Service) fiber.Handler {
     return func(c *fiber.Ctx) error {
         bookID := c.Params("id") 

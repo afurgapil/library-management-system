@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	_ "github.com/afurgapil/library-management-system/docs"
 	"github.com/afurgapil/library-management-system/internal/api/routes"
 	"github.com/afurgapil/library-management-system/internal/database"
 	"github.com/afurgapil/library-management-system/pkg/book"
@@ -10,7 +11,9 @@ import (
 	"github.com/afurgapil/library-management-system/pkg/student"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/swagger"
 )
+
 
 func main() {
 	db, err := database.Connect()
@@ -23,7 +26,8 @@ func main() {
 	app.Get("/", func(ctx *fiber.Ctx) error {
 		return ctx.Send([]byte("Welcome to the clean-architecture mongo book shop!"))
 	})
-	
+	app.Get("/swagger/*",swagger.HandlerDefault)
+
 	bookRepo := book.NewRepo(db)
 	bookService := book.NewService(bookRepo)
 	bookRoutes:=app.Group("/api/book")
