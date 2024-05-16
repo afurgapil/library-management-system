@@ -44,7 +44,7 @@ func AddBook(service book.Service) fiber.Handler {
 	}
 }
 
-// DeleteEmployee godoc
+// DeleteBook godoc
 // @Summary Delete a book
 // @Description Delete a book by ID
 // @Tags book
@@ -69,4 +69,54 @@ func DeleteBook(service book.Service) fiber.Handler {
         }
         return c.SendStatus(http.StatusNoContent)
     }
+}
+
+// GetBook godoc
+// @Summary Get a book
+// @Description Get a book by ID
+// @Tags book
+// @Accept  json
+// @Produce  json
+// @Param   id   path      string   true  "Book ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /book/get/{id} [delete]
+func GetBook(service book.Service) fiber.Handler  {
+	return func(c *fiber.Ctx) error {
+		bookID := c.Params("id")
+		if bookID == "" {
+			c.Status(http.StatusBadRequest)
+			return c.JSON(fiber.Map{"error":"Book ID is required"})
+		}
+		result,err:=service.GetBook(bookID)
+		if err != nil {
+			c.Status(http.StatusInternalServerError)
+			return c.JSON(presenter.BookErrorResponse(err))
+		}
+		c.Status(http.StatusOK)
+		return c.JSON(presenter.BookSuccessResponse(result))
+	}
+	
+}
+
+// GetBooks godoc
+// @Summary Get a listed books
+// @Description Get a listed books with an order
+// @Tags book
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /book/gets [get]
+func GetBooks(service book.Service) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		result, err := service.GetBooks()
+		if err != nil {
+			c.Status(http.StatusInternalServerError)
+			return c.JSON(presenter.BookErrorResponse(err))
+		}
+		c.Status(http.StatusOK)
+		return c.JSON(presenter.BooksSuccessResponse(result))
+	}
 }

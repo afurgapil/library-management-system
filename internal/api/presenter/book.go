@@ -40,7 +40,7 @@ func BookSuccessResponse(data *entities.Book) *fiber.Map {
 	}
 }
 
-func BooksSuccessResponse(data *[]BookResponse) *fiber.Map {
+func BooksSuccessResponse(data []*entities.Book) *fiber.Map {
 	return &fiber.Map{
 		"status": true,
 		"data":   data,

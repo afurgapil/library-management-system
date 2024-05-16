@@ -5,6 +5,8 @@ import "github.com/afurgapil/library-management-system/pkg/entities"
 type Service interface {
 	InsertBook(book *entities.Book) (*entities.Book, error)
 	DeleteBook(bookID string) error
+	GetBook(bookID string) (*entities.Book, error)
+	GetBooks() ([]*entities.Book,error)
 }
 
 type service struct {
@@ -22,9 +24,15 @@ func (s *service) InsertBook(book *entities.Book) (*entities.Book, error) {
 }
 
 func (s *service) DeleteBook(bookID string) error {
-    err := s.repo.DeleteBook(bookID)
-    if err != nil {
-        return err
-    }
-    return nil
+ 	return s.repo.DeleteBook(bookID)
+}
+
+func (s *service) GetBook(bookID string) (*entities.Book, error)  {
+	return s.repo.GetBook(bookID)
+	
+}
+
+func (s *service) GetBooks() ([]*entities.Book, error)  {
+	return s.repo.GetBooks()
+
 }

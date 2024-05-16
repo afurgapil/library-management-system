@@ -2,6 +2,7 @@ package book
 
 import (
 	"context"
+	"errors"
 
 	"github.com/afurgapil/library-management-system/pkg/entities"
 	"github.com/afurgapil/library-management-system/pkg/utils"
@@ -11,6 +12,8 @@ import (
 type Repository interface {
     CreateBook(book *entities.Book) (*entities.Book, error)
     DeleteBook(bookID string) error
+	GetBook(bookID string) (*entities.Book, error)
+	GetBooks() ([]*entities.Book, error)
 }
 
 
@@ -58,4 +61,69 @@ func (r *repository) DeleteBook(bookID string) error {
         return err
     }
     return nil
+}
+
+func (r *repository) GetBook(bookID string) (*entities.Book, error) {
+
+	query := "SELECT * FROM book WHERE book_id = $1"
+	row := r.DB.QueryRow(context.Background(), query, bookID)
+	var book entities.Book
+	err := row.Scan(
+		&book.BookID,
+		&book.Title,
+		&book.Author,
+		&book.Genre,
+		&book.PublicationDate,
+		&book.Publisher,
+		&book.ISBN,
+		&book.PageCount,
+		&book.ShelfNumber,
+		&book.Language,
+		&book.Donor,
+	)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, errors.New("book not found")
+		}
+		return nil, err
+	}
+
+	return &book, nil
+}
+
+func (r *repository) GetBooks() ([]*entities.Book, error) {
+	query := "SELECT * FROM book"
+	rows, err := r.DB.Query(context.Background(), query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	books := make([]*entities.Book, 0)
+	for rows.Next() {
+		var book entities.Book
+		err := rows.Scan(
+			&book.BookID,
+			&book.Title,
+			&book.Author,
+			&book.Genre,
+			&book.PublicationDate,
+			&book.Publisher,
+			&book.ISBN,
+			&book.PageCount,
+			&book.ShelfNumber,
+			&book.Language,
+			&book.Donor,
+		)
+		if err != nil {
+			return nil, err
+		}
+		books = append(books, &book)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return books, nil
 }
