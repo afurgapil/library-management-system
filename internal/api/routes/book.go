@@ -9,7 +9,8 @@ import (
 )
 
 func BookRouter(app fiber.Router, service book.Service) {
-	app.Post("/add-book", handlers.AddBook(service))
-	app.Delete("/delete/:id",middleware.JWTMiddleware,handlers.DeleteBook(service))
+	app.Post("/add", handlers.AddBook(service))
+	app.Delete("/delete/:id",middleware.DevelopmentTokenMiddleware,handlers.DeleteBook(service))
+	app.Get("/get/:id",handlers.GetBook(service))
 
 }

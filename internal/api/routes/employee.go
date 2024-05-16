@@ -11,6 +11,6 @@ import (
 func EmployeeRouter(app fiber.Router, service employee.Service) {
 	app.Post("/add", handlers.AddEmployee(service))
 	app.Post("/signin", handlers.SignIn(service))
-	app.Delete("/delete/:id",middleware.JWTMiddleware ,handlers.DeleteEmployee(service))
+	app.Delete("/delete/:id",middleware.DevelopmentTokenMiddleware ,handlers.DeleteEmployee(service))
 
 }
