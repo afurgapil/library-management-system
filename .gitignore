@@ -23,3 +23,4 @@ go.work
 /docs
 /tmp
 .DS_store
+.env

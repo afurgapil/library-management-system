@@ -9,5 +9,8 @@ import (
 )
 
 func StudentRouter(app fiber.Router, service student.Service) {
-	app.Post("/add-student",middleware.DevelopmentTokenMiddleware, handlers.AddStudent(service))
+	app.Post("/add",middleware.DevelopmentStudentTokenMiddleware, handlers.AddStudent(service))
+	app.Post("/signin", handlers.StudentSignIn(service))
+	app.Post("/password-reset-request", handlers.RequestPasswordResetHandler(service))
+	app.Post("/reset-password/:token", handlers.ResetPasswordHandler(service))
 }

@@ -10,7 +10,7 @@ import (
 
 func EmployeeRouter(app fiber.Router, service employee.Service) {
 	app.Post("/add", handlers.AddEmployee(service))
-	app.Post("/signin", handlers.SignIn(service))
-	app.Delete("/delete/:id",middleware.DevelopmentTokenMiddleware ,handlers.DeleteEmployee(service))
+	app.Post("/signin", handlers.EmployeeSignIn(service))
+	app.Delete("/delete/:id",middleware.DevelopmentEmployeeTokenMiddleware ,handlers.DeleteEmployee(service))
 
 }

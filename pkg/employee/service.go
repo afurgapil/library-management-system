@@ -33,7 +33,7 @@ func (s *service) SignIn(email, password string) (string, *entities.Employee, er
 		return "", nil, errors.New("invalid email or password")
 	}
 
-	token, err := utils.GenerateJWT(employee.EmployeeID)
+	token, err := utils.GenerateEmployeeJWT(employee.EmployeeID)
 	if err != nil {
 		return "", nil, err
 	}

@@ -55,7 +55,7 @@ func AddEmployee(service employee.Service) fiber.Handler {
 // @Failure 400 {object} map[string]interface{}
 // @Failure 401 {object} map[string]interface{}
 // @Router /employee/signin [post]
-func SignIn(service employee.Service) fiber.Handler {
+func EmployeeSignIn(service employee.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var request struct {
 			Email    string `json:"email"`

@@ -6,5 +6,5 @@ type Student struct {
     StudentPassword string 	`json:"student_password"`
     Debit           int 	`json:"debit"`
     BookLimit 		int 	`json:"book_limit"`
-    IsBanned       	bool 	`json:"isBanned"`
+    IsBanned       	bool 	`json:"is_banned"`
 }
