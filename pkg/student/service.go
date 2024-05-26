@@ -1,8 +1,6 @@
 package student
 
 import (
-	"errors"
-
 	"github.com/afurgapil/library-management-system/pkg/entities"
 	"github.com/afurgapil/library-management-system/pkg/utils"
 )
@@ -12,6 +10,11 @@ type Service interface {
     SignIn(email, password string) (string, *entities.Student, error)
     RequestPasswordReset(email string) error
     ResetPassword(token, newPassword string) error
+    BookBorrow(bookID, studentID string) (string, error) 
+    DeliverBook(borrowID,bookID,studentID string) (string,error)
+	ExtendDate(borrowID string) (string,error)
+	GetBorrowedBooks(studentID string) ([]*entities.BorrowedBook, error)
+
 }
 
 type service struct {
@@ -31,7 +34,7 @@ func (s *service) InsertStudent(student *entities.Student) (*entities.Student, e
 func (s *service) SignIn(email, password string) (string, *entities.Student, error) {
     student, err := s.repo.AuthenticateStudent(email, password)
     if err != nil {
-        return "", nil, errors.New("invalid email or password")
+        return "", nil, err
     }
     token, err := utils.GenerateStudentJWT(student.StudentID)
     if err != nil {
@@ -77,4 +80,44 @@ func (s *service) ResetPassword(token, newPassword string) error {
     }
 
     return nil
+}
+
+func (s *service) BookBorrow(bookID, studentID string) (string, error) {
+    borrowID, err := s.repo.BorrowBook(bookID, studentID)
+    if err != nil {
+        return "", err
+    }
+
+    return borrowID, nil
+}
+
+func (s *service) DeliverBook(borrowId,bookId,studentID string) (string,error)  {
+    msg,err:=s.repo.DeliverBook(borrowId,bookId,studentID)
+    if err != nil {
+        return "", err
+    }
+    
+    return msg, nil
+}
+
+func (s *service) ExtendDate(borrowID string) (string,error)  {
+    msg,err := s.repo.ExtendDate(borrowID)
+    if err !=nil {
+        return "",err
+    }
+    return msg,nil
+}
+
+func (s *service) GetBorrowedBooks(studentID string) ([]*entities.BorrowedBook, error) {
+    borrowedBooks, err := s.repo.GetBorrowedBooks(studentID)
+    if err != nil {
+        return nil, err
+    }
+    
+    borrowedBooksPtrs := make([]*entities.BorrowedBook, len(borrowedBooks))
+    for i, book := range borrowedBooks {
+        borrowedBooksPtrs[i] = &book
+    }
+    
+    return borrowedBooksPtrs, nil
 }

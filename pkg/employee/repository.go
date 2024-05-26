@@ -38,7 +38,7 @@ func (r *repository) CreateEmployee(employee *entities.Employee) (*entities.Empl
         if err != nil {
             return nil, err
         }
-        if isUnique {
+        if !isUnique {
             break
         }
     }

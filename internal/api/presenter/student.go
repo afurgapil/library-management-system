@@ -44,3 +44,43 @@ func StudentErrorResponse(err error) *fiber.Map {
 		"error":  err.Error(),
 	}
 }
+
+func StudentInvalidRequestPayload() *fiber.Map  {
+	return &fiber.Map{
+		"status":false,
+		"data": "",
+		"error":"invalid request payload",
+	}
+}
+
+func StudentInvalidRequestParams() *fiber.Map  {
+	return &fiber.Map{
+		"status":false,
+		"data": "",
+		"error":"missing required parameters",
+	}
+}
+
+func StudentInternalServerError(err error) *fiber.Map  {
+	return &fiber.Map{
+		"status": false,
+		"data":   "",
+		"error": "Internal Server Error:"+ err.Error(),
+	}
+}
+
+func StudentOKResponse(msg string) *fiber.Map  {
+	return &fiber.Map{
+		"status": true,
+		"data":   msg,
+		"error":  nil,
+	}
+}
+
+func StudentGetBorrowedBooksOK(data *[]entities.BorrowedBook) *fiber.Map {
+	return &fiber.Map{
+		"status": true,
+		"data":   data,
+		"error":  nil,
+	}
+}

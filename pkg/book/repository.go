@@ -38,7 +38,7 @@ func (r *repository) CreateBook(book *entities.Book) (*entities.Book, error) {
 		if err != nil {
             return nil, err  
         }
-        if isUnique {
+        if !isUnique {
             break 
         }
 	}

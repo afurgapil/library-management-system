@@ -16,5 +16,5 @@ func CheckIdValue(db *pgx.Conn, tableName, columnName, idValue string) (bool, er
         return false, err 
     }
 
-    return count == 0, nil
+    return !(count == 0), nil
 }

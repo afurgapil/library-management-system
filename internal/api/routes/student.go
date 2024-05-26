@@ -13,4 +13,8 @@ func StudentRouter(app fiber.Router, service student.Service) {
 	app.Post("/signin", handlers.StudentSignIn(service))
 	app.Post("/password-reset-request", handlers.RequestPasswordResetHandler(service))
 	app.Post("/reset-password/:token", handlers.ResetPasswordHandler(service))
+	app.Post("/borrow-book",middleware.DevelopmentStudentTokenMiddleware,handlers.BookBorrowHandler(service))
+	app.Post("/deliver-book/:borrowID/:bookID/:studentID",middleware.DevelopmentStudentTokenMiddleware,handlers.DeliverBookHandler(service))
+	app.Post("/extend/:borrowID",middleware.DevelopmentStudentTokenMiddleware,handlers.ExtendDateHandler(service))
+	app.Get("/get-borrowed-books/:studentID",middleware.DevelopmentStudentTokenMiddleware,handlers.GetBorrowedBooksHandler(service))
 }
