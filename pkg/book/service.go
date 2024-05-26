@@ -7,6 +7,7 @@ type Service interface {
 	DeleteBook(bookID string) error
 	GetBook(bookID string) (*entities.Book, error)
 	GetBooks() ([]*entities.Book,error)
+	GetBooksByID(bookIDList []string) ([]*entities.Book,error)
 }
 
 type service struct {
@@ -34,5 +35,7 @@ func (s *service) GetBook(bookID string) (*entities.Book, error)  {
 
 func (s *service) GetBooks() ([]*entities.Book, error)  {
 	return s.repo.GetBooks()
-
+}
+func (s *service) GetBooksByID(bookIdList []string) ([]*entities.Book,error)  {
+	return s.repo.GetBooksByID(bookIdList)
 }

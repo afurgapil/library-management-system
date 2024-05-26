@@ -11,15 +11,14 @@ import (
 	"github.com/afurgapil/library-management-system/pkg/entities"
 )
 
-// AddBook godoc
 // @Summary Add a new book
 // @Description add by json book
 // @Tags book
 // @Accept  json
 // @Produce  json
 // @Param   book  body      entities.Book   true  "Add Book"
-// @Success 201 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
+// @Success 201 {object} map[string]interface{} "Book creation success response"
+// @Failure 400 {object} map[string]interface{} "Error response"
 // @Router /book/add [post]
 func AddBook(service book.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -44,16 +43,15 @@ func AddBook(service book.Service) fiber.Handler {
 	}
 }
 
-// DeleteBook godoc
 // @Summary Delete a book
 // @Description Delete a book by ID
 // @Tags book
 // @Accept  json
 // @Produce  json
 // @Param   id   path      string   true  "Book ID"
-// @Success 204 "No Content"
-// @Failure 400 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
+// @Success 204
+// @Failure 400 {object} map[string]interface{} "Error response"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
 // @Router /book/delete/{id} [delete]
 func DeleteBook(service book.Service) fiber.Handler {
     return func(c *fiber.Ctx) error {
@@ -71,17 +69,16 @@ func DeleteBook(service book.Service) fiber.Handler {
     }
 }
 
-// GetBook godoc
 // @Summary Get a book
 // @Description Get a book by ID
 // @Tags book
 // @Accept  json
 // @Produce  json
 // @Param   id   path      string   true  "Book ID"
-// @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /book/get/{id} [delete]
+// @Success 200 {object} map[string]interface{} "Book retrieval success response"
+// @Failure 400 {object} map[string]interface{} "Error response"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /book/get/{id} [get]
 func GetBook(service book.Service) fiber.Handler  {
 	return func(c *fiber.Ctx) error {
 		bookID := c.Params("id")
@@ -89,7 +86,7 @@ func GetBook(service book.Service) fiber.Handler  {
 			c.Status(http.StatusBadRequest)
 			return c.JSON(fiber.Map{"error":"Book ID is required"})
 		}
-		result,err:=service.GetBook(bookID)
+		result,err := service.GetBook(bookID)
 		if err != nil {
 			c.Status(http.StatusInternalServerError)
 			return c.JSON(presenter.BookErrorResponse(err))
@@ -97,8 +94,8 @@ func GetBook(service book.Service) fiber.Handler  {
 		c.Status(http.StatusOK)
 		return c.JSON(presenter.BookSuccessResponse(result))
 	}
-	
 }
+
 
 // GetBooks godoc
 // @Summary Get a listed books
@@ -119,4 +116,37 @@ func GetBooks(service book.Service) fiber.Handler {
 		c.Status(http.StatusOK)
 		return c.JSON(presenter.BooksSuccessResponse(result))
 	}
+}
+
+
+// @Summary Get books by ID
+// @Description Retrieve a list of books by their IDs
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param request body object true "Book ID List"
+// @Success 200 {object} map[string]interface{}{"status":bool,"data":[]entities.Book}
+// @Failure 400 {object} map[string]interface{}{"status":bool,"error":string}
+// @Failure 500 {object} map[string]interface{}{"status":bool,"error":string}
+// @Router /book/ [post]
+func GetBooksByIDHandler(service book.Service) fiber.Handler {
+    return func(c *fiber.Ctx) error {
+        var request struct {
+            BookIDs []string `json:"book_ids"`
+        }
+
+        if err := c.BodyParser(&request); err != nil {
+            c.Status(http.StatusBadRequest)
+			return c.JSON(presenter.BookErrorResponse(err))
+        }
+
+        books, err := service.GetBooksByID(request.BookIDs)
+        if err != nil {
+           	c.Status(http.StatusInternalServerError)
+			return c.JSON(presenter.BookErrorResponse(err))
+        }
+
+        c.Status(http.StatusOK)
+		return c.JSON(presenter.BooksSuccessResponse(books))
+    }
 }

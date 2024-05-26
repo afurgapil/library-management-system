@@ -3,6 +3,7 @@ package book
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/afurgapil/library-management-system/pkg/entities"
 	"github.com/afurgapil/library-management-system/pkg/utils"
@@ -14,6 +15,7 @@ type Repository interface {
     DeleteBook(bookID string) error
 	GetBook(bookID string) (*entities.Book, error)
 	GetBooks() ([]*entities.Book, error)
+	GetBooksByID(bookIDList []string) ([]*entities.Book,error)
 }
 
 
@@ -126,4 +128,43 @@ func (r *repository) GetBooks() ([]*entities.Book, error) {
 	}
 
 	return books, nil
+}
+
+func (r *repository) GetBooksByID(bookIDList []string) ([]*entities.Book, error) {
+    var books []*entities.Book
+
+    query := `SELECT * FROM book WHERE book_id = ANY($1)`
+
+    rows, err := r.DB.Query(context.Background(), query, bookIDList)
+    if err != nil {
+        return nil, fmt.Errorf("error querying books by ID: %w", err)
+    }
+    defer rows.Close()
+
+    for rows.Next() {
+        var book entities.Book
+        err := rows.Scan(
+		&book.BookID,
+		&book.Title,
+		&book.Author,
+		&book.Genre,
+		&book.PublicationDate,
+		&book.Publisher,
+		&book.ISBN,
+		&book.PageCount,
+		&book.ShelfNumber,
+		&book.Language,
+		&book.Donor,)
+		
+        if err != nil {
+            return nil, fmt.Errorf("error scanning book: %w", err)
+        }
+        books = append(books, &book)
+    }
+
+    if rows.Err() != nil {
+        return nil, fmt.Errorf("error iterating through books: %w", rows.Err())
+    }
+
+    return books, nil
 }

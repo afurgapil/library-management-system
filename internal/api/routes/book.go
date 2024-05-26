@@ -13,4 +13,5 @@ func BookRouter(app fiber.Router, service book.Service) {
 	app.Delete("/delete/:id",middleware.DevelopmentStudentTokenMiddleware,handlers.DeleteBook(service))
 	app.Get("/get/:id",handlers.GetBook(service))
 	app.Get("/gets",handlers.GetBooks(service))
+	app.Get("/gets-by-ID",handlers.GetBooksByIDHandler(service))
 }
