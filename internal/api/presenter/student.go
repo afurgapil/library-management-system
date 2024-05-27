@@ -14,6 +14,45 @@ type StudentResponse struct {
     IsBanned       	bool 	`json:"is_banned"`
 }
 
+type BorrowedBook struct{
+	BorrowID		string `json:"borrow_id"`
+    StudentID       string `json:"student_id"`
+	BookID 			string `json:"book_id"`
+	BorrowDate 		string `json:"borrow_date"`
+	DeliveryDate 	string `json:"delivery_date"`
+	IsExtended 		bool `json:"is_extended"`
+}
+
+type StudentSuccessResponseStruct struct {
+	Status bool `json:"status" example:"true"`
+	Data StudentResponse `json:"data"`
+	Error string `json:"error" example:""`
+}
+
+type StudentOKResponseStruct struct {
+	Status bool `json:"status" example:"true"`
+	Data string `json:"data"`
+	Error string `json:"error" example:""`
+}
+
+type StudentBorrowedBookStruct struct {
+	Status bool `json:"status" example:"true"`
+	Data []BorrowedBook `json:"data"`
+	Error string `json:"error" example:""`
+}
+
+type StudentBorrowBookRequestStruct struct {
+	StudentID string `json:"student_id"`
+	BookID string `json:"book_id"`
+}
+
+type StudentErrorResponseStruct struct {
+	Status bool `json:"status" example:"false"`
+	Data string `json:""`
+	Error string `json:"error"`
+}
+
+
 func StudentSuccessResponse(data *entities.Student) *fiber.Map {
 	student := StudentResponse{
 		StudentID:            data.StudentID,

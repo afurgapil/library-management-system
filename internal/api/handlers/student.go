@@ -18,9 +18,9 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param   student  body      entities.Student   true  "Add Student"
-// @Success 201 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
+// @Success 201 {object} presenter.StudentSuccessResponseStruct
+// @Failure 400 {object} presenter.StudentErrorResponseStruct
+// @Failure 500 {object} presenter.StudentErrorResponseStruct
 // @Router /student/add [post]
 func AddStudent(service student.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -52,9 +52,10 @@ func AddStudent(service student.Service) fiber.Handler {
 // @Accept  json
 // @Produce  json
 // @Param   signin  body      object{email=string,password=string}   true  "Sign In"
-// @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
-// @Failure 401 {object} map[string]interface{}
+// @Success 201 {object} presenter.StudentSuccessResponseStruct
+// @Failure 400 {object} presenter.StudentErrorResponseStruct
+// @Failure 401 {object} presenter.StudentErrorResponseStruct
+// @Failure 500 {object} presenter.StudentErrorResponseStruct
 // @Router /student/signin [post]
 func StudentSignIn(service student.Service) fiber.Handler {
     return func(c *fiber.Ctx) error {
@@ -102,10 +103,10 @@ func StudentSignIn(service student.Service) fiber.Handler {
 // @Tags student
 // @Accept json
 // @Produce json
-// @Param request body map[string]string true "Email"
-// @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
+// @Param resetRequest body object{email=string} true "Reset Request"
+// @Success 201 {object} presenter.StudentOKResponseStruct
+// @Failure 400 {object} presenter.StudentErrorResponseStruct
+// @Failure 500 {object} presenter.StudentErrorResponseStruct
 // @Router /student/password-reset-request [post]
 func RequestPasswordResetHandler(service student.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -138,11 +139,11 @@ func RequestPasswordResetHandler(service student.Service) fiber.Handler {
 // @Tags student
 // @Accept json
 // @Produce json
-// @Param token request string true "Token"
-// @Param new_password body object true "New Password"
-// @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
+// @Param token path string true "Token"
+// @Param request body object{new_email=string} true "New Password"
+// @Success 200 {object} presenter.StudentOKResponseStruct
+// @Failure 400 {object} presenter.StudentErrorResponseStruct
+// @Failure 500 {object} presenter.StudentErrorResponseStruct
 // @Router /student/reset-password/{token} [post]
 func ResetPasswordHandler(service student.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -174,12 +175,11 @@ func ResetPasswordHandler(service student.Service) fiber.Handler {
 // @Tags student
 // @Accept  json
 // @Produce  json
-// @Param   student_id  body string true "Student ID"
-// @Param   book_id     body string true "Book ID"
-// @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /student/borrow-book [post]
+// @Param   request  body presenter.StudentBorrowBookRequestStruct true "Borrow Book Request"
+// @Success 200 {object} presenter.StudentOKResponseStruct
+// @Failure 400 {object} presenter.StudentErrorResponseStruct
+// @Failure 500 {object} presenter.StudentErrorResponseStruct
+// @Router /student/borrow-book/ [post]
 func BookBorrowHandler(service student.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		type BorrowRequest struct {
@@ -213,10 +213,10 @@ func BookBorrowHandler(service student.Service) fiber.Handler {
 // @Param   borrow_id  path string true "Borrow ID"
 // @Param   book_id     path string true "Book ID"
 // @Param   student_id  path string true "Student ID"
-// @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /student/borrow-book/{borrow_id}/{book_id}/{student_id} [post]
+// @Success 200 {object} presenter.StudentOKResponseStruct
+// @Failure 400 {object} presenter.StudentErrorResponseStruct
+// @Failure 500 {object} presenter.StudentErrorResponseStruct
+// @Router /student/deliver-book/{borrow_id}/{book_id}/{student_id} [post]
 func DeliverBookHandler(service student.Service) fiber.Handler {
     return func(c *fiber.Ctx) error {
         borrowID := c.Params("borrowID")
@@ -246,9 +246,9 @@ func DeliverBookHandler(service student.Service) fiber.Handler {
 // @Accept json
 // @Produce json
 // @Param borrowID path string true "Borrow ID"
-// @Success 200 {object} map[string]interface{}{"message": "string"}
-// @Failure 400 {object} map[string]interface{}{"error": "string"}
-// @Failure 500 {object} map[string]interface{}{"error": "string"}
+// @Success 200 {object} presenter.StudentOKResponseStruct
+// @Failure 400 {object} presenter.StudentErrorResponseStruct
+// @Failure 500 {object} presenter.StudentErrorResponseStruct
 // @Router /student/extend/{borrowID} [post]
 func ExtendDateHandler(service student.Service) fiber.Handler {
     return func(c *fiber.Ctx) error {
@@ -286,9 +286,9 @@ func ExtendDateHandler(service student.Service) fiber.Handler {
 // @Accept json
 // @Produce json
 // @Param studentID path string true "Student ID"
-// @Success 200 {array} entities.BorrowedBook
-// @Failure 400 {object} map[string]string{"error": "Bad Request"}
-// @Failure 500 {object} map[string]string{"error": "Internal Server Error"}
+// @Success 200 {object} presenter.StudentBorrowedBookStruct
+// @Failure 400 {object} presenter.StudentErrorResponseStruct
+// @Failure 500 {object} presenter.StudentErrorResponseStruct
 // @Router /students/get-borrowed-books/{studentID} [get]
 func GetBorrowedBooksHandler(service student.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {

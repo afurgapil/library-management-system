@@ -5,8 +5,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type BookResponse struct {
-	ID             string `json:"string"`
+type BookResponseStruct struct {
+	BookID             string `json:"book_id"`
 	Title          string `json:"title"`
 	Author         string `json:"author"`
 	Genre          string `json:"genre"`
@@ -19,9 +19,26 @@ type BookResponse struct {
 	Donor          string `json:"donor"`
 }
 
+type BookSuccessResponseStruct struct {
+	Status 	bool `json:"status" example:"true"`
+	Data 	BookResponseStruct `json:"data"`
+	Error	 string `json:"error" example:"nil"`
+}
+
+type BooksSuccessResponseStruct struct {
+	Status 	bool `json:"status" example:"true"`
+	Data 	[]BookResponseStruct `json:"data"`
+	Error	 string `json:"error" example:"nil"`
+}
+
+type BookErrorResponseStruct struct {
+	Status 	bool `json:"status" example:"false"`
+	Data 	string `json:"data" example:""`
+	Error	 string `json:"error"`
+}
 func BookSuccessResponse(data *entities.Book) *fiber.Map {
-	book:=BookResponse{
-		ID:            data.BookID,
+	book:=BookResponseStruct{
+		BookID:            data.BookID,
 		Title:         data.Title,
 		Author:        data.Author,
 		Genre:         data.Genre,

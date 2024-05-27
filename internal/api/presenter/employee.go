@@ -14,6 +14,18 @@ type EmployeeResponse struct {
     Position			string `json:"position"`
 }
 
+type EmployeeSuccessResponseStruct struct{
+	Status bool `json:"status" example:"true"`
+	Data EmployeeResponse `json:"data"`
+	Error string `json:"error"`
+}
+
+type EmployeeErrorResponseStruct struct {
+	Status bool `json:"status" example:"false"`
+	Data string `json:""`
+	Error string `json:"error"`
+}
+
 func EmployeeSuccessResponse(data *entities.Employee) *fiber.Map {
 	employee:=EmployeeResponse{
 		EmployeeID:            	data.EmployeeID,

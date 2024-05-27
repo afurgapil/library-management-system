@@ -18,8 +18,8 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param   employee  body      entities.Employee   true  "Add Employee"
-// @Success 201 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
+// @Success 201 {object} presenter.EmployeeSuccessResponseStruct
+// @Failure 400 {object} presenter.EmployeeErrorResponseStruct
 // @Router /employee/add [post]
 func AddEmployee(service employee.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -51,9 +51,9 @@ func AddEmployee(service employee.Service) fiber.Handler {
 // @Accept  json
 // @Produce  json
 // @Param   signin  body      object{email=string,password=string}   true  "Sign In"
-// @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
-// @Failure 401 {object} map[string]interface{}
+// @Success 200 {object} presenter.EmployeeSuccessResponseStruct
+// @Failure 400 {object} presenter.EmployeeErrorResponseStruct
+// @Failure 401 {object} presenter.EmployeeErrorResponseStruct
 // @Router /employee/signin [post]
 func EmployeeSignIn(service employee.Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -91,8 +91,8 @@ func EmployeeSignIn(service employee.Service) fiber.Handler {
 // @Produce  json
 // @Param   id   path      string   true  "Employee ID"
 // @Success 204 "No Content"
-// @Failure 400 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
+// @Failure 400 {object} presenter.EmployeeErrorResponseStruct
+// @Failure 500 {object} presenter.EmployeeErrorResponseStruct
 // @Router /employee/delete/{id} [delete]
 func DeleteEmployee(service employee.Service) fiber.Handler  {
 	return func(c *fiber.Ctx) error {
