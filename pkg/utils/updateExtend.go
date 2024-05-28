@@ -2,19 +2,25 @@ package utils
 
 import (
 	"context"
-	"fmt"
+	"errors"
 
 	"github.com/jackc/pgx/v4"
 )
 
 func UpdateExtend(db *pgx.Conn, borrowID string) (bool, error) {
-	var extendStatus bool
+	query, err := db.Exec(context.Background(), `
+		UPDATE book_borrow
+		SET is_extended = true
+		WHERE borrow_id = $1
+	`, borrowID)
 
-	query := `UPDATE book_borrow SET is_extended = $1 WHERE borrow_id = $2 RETURNING is_extended`
-	err := db.QueryRow(context.Background(), query, true, borrowID).Scan(&extendStatus)
 	if err != nil {
-		return false, fmt.Errorf("error updating is_extended for borrow %s: %w", borrowID, err)
+		return false, err
 	}
 
-	return extendStatus, nil
+	if query.RowsAffected() == 0 {
+		return false, errors.New("borrow ID not found")
+	}
+
+	return true, nil
 }
