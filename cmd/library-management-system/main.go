@@ -14,35 +14,33 @@ import (
 	"github.com/gofiber/swagger"
 )
 
-
 func main() {
 	db, err := database.Connect()
 	if err != nil {
 		log.Fatal(err)
 	}
-	
+
 	app := fiber.New()
 	app.Use(cors.New())
 	app.Get("/", func(ctx *fiber.Ctx) error {
 		return ctx.Send([]byte("Welcome to the clean-architecture mongo book shop!"))
 	})
-	app.Get("/swagger/*",swagger.HandlerDefault)
+	app.Get("/swagger/*", swagger.HandlerDefault)
 
 	bookRepo := book.NewRepo(db)
 	bookService := book.NewService(bookRepo)
-	bookRoutes:=app.Group("/api/book")
+	bookRoutes := app.Group("/api/book")
 
 	studentRepo := student.NewRepo(db)
 	studentService := student.NewService(studentRepo)
-	studentRoutes:=app.Group("/api/student")
+	studentRoutes := app.Group("/api/student")
 
 	employeeRepo := employee.NewRepo(db)
 	employeeService := employee.NewService(employeeRepo)
-	employeeRoutes:=app.Group("/api/employee")
-	
-	
+	employeeRoutes := app.Group("/api/employee")
+
 	routes.BookRouter(bookRoutes, bookService)
-	routes.StudentRouter(studentRoutes,studentService)
-	routes.EmployeeRouter(employeeRoutes,employeeService)
+	routes.StudentRouter(studentRoutes, studentService)
+	routes.EmployeeRouter(employeeRoutes, employeeService)
 	app.Listen(":3000")
 }

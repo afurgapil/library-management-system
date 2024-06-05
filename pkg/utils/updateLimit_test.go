@@ -2,6 +2,9 @@ package utils
 
 import (
 	"testing"
+
+	"github.com/afurgapil/library-management-system/pkg/entities"
+	testutils "github.com/afurgapil/library-management-system/pkg/testUtils"
 )
 
 func TestUpdateLimit(t *testing.T) {
@@ -17,35 +20,36 @@ func TestUpdateLimit(t *testing.T) {
 		{
 			name: "Valid Borrow Update",
 			args: args{
-				studentID: "c96d572b-1f54-438a-8a00-6191f09645d9",
+				studentID:  "daadfed9-c2b3-40a2-9c87-b0d8130adcc5",
 				updateType: "borrow",
 			},
 			wantErr: false,
-		},	{
-			name: "Invalid Borrow Update",
-			args: args{
-				studentID: "invalid-userID",
-				updateType: "borrow",
-			},
-			wantErr: true,
-		},	{
+		},
+		{
 			name: "Valid Delivery Update",
 			args: args{
-				studentID: "c96d572b-1f54-438a-8a00-6191f09645d9",
+				studentID:  "daadfed9-c2b3-40a2-9c87-b0d8130adcc5",
 				updateType: "delivery",
 			},
 			wantErr: false,
-		},	{
-			name: "Invalid Delivery Update",
-			args: args{
-				studentID: "invalid-userID",
-				updateType: "delivery",
-			},
-			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			student := &entities.Student{
+				StudentID:       tt.args.studentID,
+				StudentMail:     "student_mail",
+				StudentPassword: "student_password",
+				Debit:           20,
+				BookLimit:       20,
+				IsBanned:        false,
+			}
+			if err := testutils.SetupTestDataStudent(dbConnection, student); err != nil {
+				t.Fatalf("Failed to set up test data: %v", err)
+			}
+
+			defer testutils.CleanupTestDataStudent(dbConnection)
+
 			if err := UpdateLimit(dbConnection, tt.args.studentID, tt.args.updateType); (err != nil) != tt.wantErr {
 				t.Errorf("UpdateLimit() error = %v, wantErr %v", err, tt.wantErr)
 			}

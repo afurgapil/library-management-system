@@ -2,6 +2,9 @@ package utils
 
 import (
 	"testing"
+
+	"github.com/afurgapil/library-management-system/pkg/entities"
+	testutils "github.com/afurgapil/library-management-system/pkg/testUtils"
 )
 
 func TestCheckIdValue(t *testing.T) {
@@ -21,7 +24,7 @@ func TestCheckIdValue(t *testing.T) {
 			args: args{
 				tableName:  "student",
 				columnName: "student_id",
-				idValue:    "c96d572b-1f54-438a-8a00-6191f09645d9",
+				idValue:    "daadfed9-c2b3-40a2-9c87-b0d8130adcc5",
 			},
 			want:    true,
 			wantErr: false,
@@ -39,6 +42,21 @@ func TestCheckIdValue(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			testutils.CleanupTestDataStudent(dbConnection)
+
+			if tt.want {
+				if err := testutils.SetupTestDataStudent(dbConnection, &entities.Student{
+					StudentID:       tt.args.idValue,
+					StudentMail:     "student_mail",
+					StudentPassword: "student_password",
+					Debit:           20,
+					BookLimit:       20,
+					IsBanned:        false,
+				}); err != nil {
+					t.Fatalf("Failed to set up test data: %v", err)
+				}
+			}
+
 			got, err := CheckIdValue(dbConnection, tt.args.tableName, tt.args.columnName, tt.args.idValue)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CheckIdValue() error = %v, wantErr %v", err, tt.wantErr)
@@ -47,6 +65,8 @@ func TestCheckIdValue(t *testing.T) {
 			if got != tt.want {
 				t.Errorf("CheckIdValue() = %v, want %v", got, tt.want)
 			}
+
+			defer testutils.CleanupTestDataStudent(dbConnection)
 		})
 	}
 }

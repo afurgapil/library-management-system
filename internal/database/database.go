@@ -8,7 +8,6 @@ import (
 	"github.com/jackc/pgx/v4"
 )
 
-
 const (
 	host     = "localhost"
 	port     = 5432
