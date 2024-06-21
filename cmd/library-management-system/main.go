@@ -22,9 +22,6 @@ func main() {
 
 	app := fiber.New()
 	app.Use(cors.New())
-	app.Get("/", func(ctx *fiber.Ctx) error {
-		return ctx.Send([]byte("Welcome to the clean-architecture mongo book shop!"))
-	})
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
 	bookRepo := book.NewRepo(db)

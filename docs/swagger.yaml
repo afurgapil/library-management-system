@@ -1,0 +1,723 @@
+definitions:
+  entities.Book:
+    properties:
+      author:
+        type: string
+      book_id:
+        type: string
+      donor:
+        type: string
+      genre:
+        type: string
+      isbn:
+        type: string
+      language:
+        type: string
+      page_count:
+        type: integer
+      publication_date:
+        type: string
+      publisher:
+        type: string
+      shelf_number:
+        type: string
+      title:
+        type: string
+    type: object
+  entities.Employee:
+    properties:
+      employee_id:
+        type: string
+      employee_mail:
+        type: string
+      employee_password:
+        type: string
+      employee_phone_number:
+        type: string
+      employee_username:
+        type: string
+      position:
+        type: string
+    type: object
+  entities.Student:
+    properties:
+      book_limit:
+        type: integer
+      debit:
+        type: integer
+      is_banned:
+        type: boolean
+      student_id:
+        type: string
+      student_mail:
+        type: string
+      student_password:
+        type: string
+    type: object
+  presenter.BookErrorResponseStruct:
+    properties:
+      data:
+        example: ""
+        type: string
+      error:
+        type: string
+      status:
+        example: false
+        type: boolean
+    type: object
+  presenter.BookResponseStruct:
+    properties:
+      author:
+        type: string
+      book_id:
+        type: string
+      donor:
+        type: string
+      genre:
+        type: string
+      isbn:
+        type: string
+      language:
+        type: string
+      page_count:
+        type: integer
+      publication_date:
+        type: string
+      publisher:
+        type: string
+      shelf_number:
+        type: string
+      title:
+        type: string
+    type: object
+  presenter.BookSuccessResponseStruct:
+    properties:
+      data:
+        $ref: '#/definitions/presenter.BookResponseStruct'
+      error:
+        example: nil
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  presenter.BooksSuccessResponseStruct:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/presenter.BookResponseStruct'
+        type: array
+      error:
+        example: nil
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  presenter.BorrowedBook:
+    properties:
+      book_id:
+        type: string
+      borrow_date:
+        type: string
+      borrow_id:
+        type: string
+      delivery_date:
+        type: string
+      is_extended:
+        type: boolean
+      student_id:
+        type: string
+    type: object
+  presenter.EmployeeErrorResponseStruct:
+    properties:
+      data:
+        type: string
+      error:
+        type: string
+      status:
+        example: false
+        type: boolean
+    type: object
+  presenter.EmployeeResponse:
+    properties:
+      employee_id:
+        type: string
+      employee_mail:
+        type: string
+      employee_password:
+        type: string
+      employee_phone_number:
+        type: string
+      employee_username:
+        type: string
+      position:
+        type: string
+    type: object
+  presenter.EmployeeSuccessResponseStruct:
+    properties:
+      data:
+        $ref: '#/definitions/presenter.EmployeeResponse'
+      error:
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  presenter.StudentBorrowBookRequestStruct:
+    properties:
+      book_id:
+        type: string
+      student_id:
+        type: string
+    type: object
+  presenter.StudentBorrowedBookStruct:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/presenter.BorrowedBook'
+        type: array
+      error:
+        example: ""
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  presenter.StudentErrorResponseStruct:
+    properties:
+      data:
+        type: string
+      error:
+        type: string
+      status:
+        example: false
+        type: boolean
+    type: object
+  presenter.StudentOKResponseStruct:
+    properties:
+      data:
+        type: string
+      error:
+        example: ""
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  presenter.StudentResponse:
+    properties:
+      book_limit:
+        type: integer
+      debit:
+        type: integer
+      is_banned:
+        type: boolean
+      student_id:
+        type: string
+      student_mail:
+        type: string
+      student_password:
+        type: string
+    type: object
+  presenter.StudentSuccessResponseStruct:
+    properties:
+      data:
+        $ref: '#/definitions/presenter.StudentResponse'
+      error:
+        example: ""
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+info:
+  contact: {}
+paths:
+  /book/add:
+    post:
+      consumes:
+      - application/json
+      description: add by json book
+      parameters:
+      - description: Add Book
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Book'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/presenter.BookSuccessResponseStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.BookErrorResponseStruct'
+      summary: Add a new book
+      tags:
+      - book
+  /book/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a book by ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.BookErrorResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.BookErrorResponseStruct'
+      summary: Delete a book
+      tags:
+      - book
+  /book/get/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a book by ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.BookSuccessResponseStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.BookErrorResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.BookErrorResponseStruct'
+      summary: Get a book
+      tags:
+      - book
+  /book/gets:
+    get:
+      consumes:
+      - application/json
+      description: Get a listed books with an order
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.BooksSuccessResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.BookErrorResponseStruct'
+      summary: Get a listed books
+      tags:
+      - book
+  /book/gets-by-ID:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of books by their IDs
+      parameters:
+      - description: Book ID List
+        in: body
+        name: request
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.BooksSuccessResponseStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.BookErrorResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.BookErrorResponseStruct'
+      summary: Get books by ID
+      tags:
+      - book
+  /employee/add:
+    post:
+      consumes:
+      - application/json
+      description: add by json employee
+      parameters:
+      - description: Add Employee
+        in: body
+        name: employee
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Employee'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/presenter.EmployeeSuccessResponseStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.EmployeeErrorResponseStruct'
+      summary: Add a new employee
+      tags:
+      - employee
+  /employee/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an employee by ID
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.EmployeeErrorResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.EmployeeErrorResponseStruct'
+      summary: Delete an employee
+      tags:
+      - employee
+  /employee/signin:
+    post:
+      consumes:
+      - application/json
+      description: Sign in an employee with email and password
+      parameters:
+      - description: Sign In
+        in: body
+        name: signin
+        required: true
+        schema:
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.EmployeeSuccessResponseStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.EmployeeErrorResponseStruct'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/presenter.EmployeeErrorResponseStruct'
+      summary: Sign in an employee
+      tags:
+      - employee
+  /student/add:
+    post:
+      consumes:
+      - application/json
+      description: add by json student
+      parameters:
+      - description: Add Student
+        in: body
+        name: student
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Student'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/presenter.StudentSuccessResponseStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+      summary: Add a new student
+      tags:
+      - student
+  /student/borrow-book/:
+    post:
+      consumes:
+      - application/json
+      description: Allows a student to borrow a book
+      parameters:
+      - description: Borrow Book Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/presenter.StudentBorrowBookRequestStruct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.StudentOKResponseStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+      summary: Borrow a book
+      tags:
+      - student
+  /student/deliver-book/{borrow_id}/{book_id}/{student_id}:
+    post:
+      consumes:
+      - application/json
+      description: Allows a student to deliver a book
+      parameters:
+      - description: Borrow ID
+        in: path
+        name: borrow_id
+        required: true
+        type: string
+      - description: Book ID
+        in: path
+        name: book_id
+        required: true
+        type: string
+      - description: Student ID
+        in: path
+        name: student_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.StudentOKResponseStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+      summary: Deliver a book
+      tags:
+      - student
+  /student/extend/{borrowID}:
+    post:
+      consumes:
+      - application/json
+      description: Extend the borrow date for a given borrow ID.
+      parameters:
+      - description: Borrow ID
+        in: path
+        name: borrowID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.StudentOKResponseStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+      summary: Extend Borrow Date
+      tags:
+      - student
+  /student/password-reset-request:
+    post:
+      consumes:
+      - application/json
+      description: Send a password reset email to the student
+      parameters:
+      - description: Reset Request
+        in: body
+        name: resetRequest
+        required: true
+        schema:
+          properties:
+            email:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/presenter.StudentOKResponseStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+      summary: Request password reset
+      tags:
+      - student
+  /student/reset-password/{token}:
+    post:
+      consumes:
+      - application/json
+      description: Reset the student's password using a token
+      parameters:
+      - description: Token
+        in: path
+        name: token
+        required: true
+        type: string
+      - description: New Password
+        in: body
+        name: request
+        required: true
+        schema:
+          properties:
+            new_email:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.StudentOKResponseStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+      summary: Reset password
+      tags:
+      - student
+  /student/signin:
+    post:
+      consumes:
+      - application/json
+      description: Sign in a student with email and password
+      parameters:
+      - description: Sign In
+        in: body
+        name: signin
+        required: true
+        schema:
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/presenter.StudentSuccessResponseStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+      summary: Sign in a student
+      tags:
+      - student
+  /students/get-borrowed-books/{studentID}:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of borrowed books for a given student ID
+      parameters:
+      - description: Student ID
+        in: path
+        name: studentID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.StudentBorrowedBookStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/presenter.StudentErrorResponseStruct'
+      summary: Get Borrowed Books
+      tags:
+      - student
+swagger: "2.0"
