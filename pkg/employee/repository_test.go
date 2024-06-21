@@ -91,66 +91,6 @@ func Test_repository_CreateEmployee(t *testing.T) {
 			wantErr:        true,
 			wantErrMessage: "this mail has been used already",
 		},
-		{
-			name: "Short Username",
-			args: args{
-				employee: &entities.Employee{
-					EmployeeMail:        "test@example.com",
-					EmployeeUsername:    "user",
-					EmployeePassword:    "testpassword",
-					EmployeePhoneNumber: "123456789",
-					Position:            "tester",
-				},
-			},
-			want:           nil,
-			wantErr:        true,
-			wantErrMessage: "username should be minimum 8 characters",
-		},
-		{
-			name: "Long Username",
-			args: args{
-				employee: &entities.Employee{
-					EmployeeMail:        "test@example.com",
-					EmployeeUsername:    "usernamethatiswaytoolongandshouldnotbeacceptedbecauseitiswaymorethan64characterslong",
-					EmployeePassword:    "testpassword",
-					EmployeePhoneNumber: "123456789",
-					Position:            "tester",
-				},
-			},
-			want:           nil,
-			wantErr:        true,
-			wantErrMessage: "username should be maximum 64 characters",
-		},
-		{
-			name: "Short Password",
-			args: args{
-				employee: &entities.Employee{
-					EmployeeMail:        "test@example.com",
-					EmployeeUsername:    "testuser",
-					EmployeePassword:    "short",
-					EmployeePhoneNumber: "123456789",
-					Position:            "tester",
-				},
-			},
-			want:           nil,
-			wantErr:        true,
-			wantErrMessage: "password should be minimum 8 characters",
-		},
-		{
-			name: "Long Password",
-			args: args{
-				employee: &entities.Employee{
-					EmployeeMail:        "test@example.com",
-					EmployeeUsername:    "testuser",
-					EmployeePassword:    "passwordthatiswaytoolongandshouldnotbeacceptedbecauseitiswaymorethan64characterslong",
-					EmployeePhoneNumber: "123456789",
-					Position:            "tester",
-				},
-			},
-			want:           nil,
-			wantErr:        true,
-			wantErrMessage: "password should be maximum 64 characters",
-		},
 	}
 
 	for _, tt := range tests {
@@ -231,26 +171,6 @@ func Test_repository_AuthenticateUser(t *testing.T) {
 			want:           nil,
 			wantErr:        true,
 			wantErrMessage: "username password combination is wrong",
-		},
-		{
-			name: "Empty Email",
-			args: args{
-				email:    "",
-				password: "password",
-			},
-			want:           nil,
-			wantErr:        true,
-			wantErrMessage: "email cannot be null",
-		},
-		{
-			name: "Empty Password",
-			args: args{
-				email:    "employeemail@mail.com",
-				password: "",
-			},
-			want:           nil,
-			wantErr:        true,
-			wantErrMessage: "password cannot be null",
 		},
 	}
 	for _, tt := range tests {

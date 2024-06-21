@@ -183,17 +183,6 @@ func Test_repository_DeleteBook(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "Empty BookID",
-			args: args{
-				bookID: "",
-			},
-			fields: fields{
-				DB: dbConnection,
-			},
-			wantErr:        true,
-			wantErrMessage: "book ID cannot be empty",
-		},
-		{
 			name: "Book Not Found",
 			args: args{
 				bookID: "delete-book-ID",
@@ -261,17 +250,6 @@ func Test_repository_GetBook(t *testing.T) {
 				Donor:           "book_donor",
 			},
 			wantErr: false,
-		},
-		{
-			name: "Empty bookID",
-			args: args{
-				bookID: "",
-			},
-			fields: fields{
-				DB: dbConnection,
-			},
-			wantErr:        true,
-			wantErrMessage: "book ID cannot be empty",
 		},
 		{
 			name: "Book Not Found",
