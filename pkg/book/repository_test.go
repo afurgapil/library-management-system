@@ -8,6 +8,7 @@ import (
 	"github.com/afurgapil/library-management-system/pkg/entities"
 	testutils "github.com/afurgapil/library-management-system/pkg/testUtils"
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
 // Book - DB Connection

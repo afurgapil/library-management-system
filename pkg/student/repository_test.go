@@ -11,6 +11,7 @@ import (
 	testutils "github.com/afurgapil/library-management-system/pkg/testUtils"
 	"github.com/afurgapil/library-management-system/pkg/utils"
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
 // Student - DB Connection

@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
 func CheckExtend(db *pgx.Conn, borrowID string) (bool, error) {
@@ -13,7 +14,7 @@ func CheckExtend(db *pgx.Conn, borrowID string) (bool, error) {
 	query := `SELECT is_extended FROM book_borrow WHERE borrow_id = $1`
 	err := db.QueryRow(context.Background(), query, borrowID).Scan(&extendStatus)
 	if err != nil {
-		return false, err 
+		return false, err
 	}
 	if extendStatus {
 		return true, errors.New("date extended already")

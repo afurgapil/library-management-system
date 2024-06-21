@@ -5,6 +5,7 @@ import (
 
 	"github.com/afurgapil/library-management-system/pkg/entities"
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
 var ExampleBook = &entities.Book{

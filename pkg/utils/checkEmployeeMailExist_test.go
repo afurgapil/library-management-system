@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
 func setupTestDataCheckEmployeeMailExist(db *pgx.Conn, email string) error {

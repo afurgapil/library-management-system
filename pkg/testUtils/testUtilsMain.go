@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
 var DbConnection *pgx.Conn

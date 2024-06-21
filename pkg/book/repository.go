@@ -9,6 +9,7 @@ import (
 	"github.com/afurgapil/library-management-system/pkg/entities"
 	"github.com/afurgapil/library-management-system/pkg/utils"
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
 type Repository interface {

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
 func SetupTestDataCreateEmployee(db *pgx.Conn, email string) error {

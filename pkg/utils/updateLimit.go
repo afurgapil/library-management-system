@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
 func UpdateLimit(db *pgx.Conn, studentID string, updateType string) error {

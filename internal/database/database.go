@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
 const (

@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
 func CheckEmployeeMailExist(db *pgx.Conn, mail string) (bool, error) {

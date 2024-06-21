@@ -7,6 +7,7 @@ import (
 
 	testutils "github.com/afurgapil/library-management-system/pkg/testUtils"
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
 // Utils - DB Connection

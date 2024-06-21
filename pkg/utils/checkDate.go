@@ -5,9 +5,10 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
 )
 
-func CheckDate( db *pgx.Conn, borrowID string) (int, error) {
+func CheckDate(db *pgx.Conn, borrowID string) (int, error) {
 	var deliveryDate string
 	query := `SELECT delivery_date FROM book_borrow WHERE borrow_id = $1`
 	err := db.QueryRow(context.Background(), query, borrowID).Scan(&deliveryDate)
