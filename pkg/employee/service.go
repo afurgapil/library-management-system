@@ -24,10 +24,38 @@ func NewService(r Repository) Service {
 }
 
 func (s *service) InsertEmployee(employee *entities.Employee) (*entities.Employee, error) {
-	return s.repo.CreateEmployee(employee)
+	if !utils.CheckMailValid(employee.EmployeeMail) {
+		return nil, errors.New("invalid email address")
+	}
+	if len(employee.EmployeeUsername) < 8 {
+		return nil, errors.New("username should be minimum 8 characters")
+	}
+	if len(employee.EmployeeUsername) > 64 {
+		return nil, errors.New("username should be maximum 64 characters")
+	}
+	if len(employee.EmployeePassword) < 8 {
+		return nil, errors.New("password should be minimum 8 characters")
+	}
+	if len(employee.EmployeePassword) > 64 {
+		return nil, errors.New("password should be maximum 64 characters")
+	}
+
+	newEmployee, err := s.repo.CreateEmployee(employee)
+	if err != nil {
+		return nil, err
+	}
+
+	return newEmployee, nil
 }
 
 func (s *service) SignIn(email, password string) (string, *entities.Employee, error) {
+	if email == "" {
+		return "", nil, errors.New("email cannot be null")
+	}
+	if password == "" {
+		return "", nil, errors.New("password cannot be null")
+	}
+
 	employee, err := s.repo.AuthenticateUser(email, password)
 	if err != nil {
 		return "", nil, errors.New("invalid email or password")
@@ -42,7 +70,10 @@ func (s *service) SignIn(email, password string) (string, *entities.Employee, er
 }
 
 func (s *service) DeleteEmployee(employeeID string) error {
-	err:=s.repo.DeleteEmployee(employeeID)
+	if employeeID == "" {
+		return errors.New("employee ID cannot be empty")
+	}
+	err := s.repo.DeleteEmployee(employeeID)
 	if err != nil {
 		return err
 	}

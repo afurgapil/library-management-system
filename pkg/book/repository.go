@@ -63,10 +63,6 @@ func (r *repository) CreateBook(book *entities.Book) (*entities.Book, error) {
 func (r *repository) DeleteBook(bookID string) error {
 	query := "DELETE FROM book WHERE book_id = $1"
 
-	if bookID == "" {
-		return errors.New("book ID cannot be empty")
-	}
-
 	result, err := r.DB.Exec(context.Background(), query, bookID)
 
 	if err != nil {
@@ -82,10 +78,6 @@ func (r *repository) DeleteBook(bookID string) error {
 func (r *repository) GetBook(bookID string) (*entities.Book, error) {
 
 	query := "SELECT * FROM book WHERE book_id = $1"
-
-	if bookID == "" {
-		return nil, errors.New("book ID cannot be empty")
-	}
 
 	row := r.DB.QueryRow(context.Background(), query, bookID)
 	var book entities.Book

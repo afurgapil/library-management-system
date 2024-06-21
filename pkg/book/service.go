@@ -1,17 +1,21 @@
 package book
 
-import "github.com/afurgapil/library-management-system/pkg/entities"
+import (
+	"errors"
+
+	"github.com/afurgapil/library-management-system/pkg/entities"
+)
 
 type Service interface {
 	InsertBook(book *entities.Book) (*entities.Book, error)
 	DeleteBook(bookID string) error
 	GetBook(bookID string) (*entities.Book, error)
-	GetBooks() ([]*entities.Book,error)
-	GetBooksByID(bookIDList []string) ([]*entities.Book,error)
+	GetBooks() ([]*entities.Book, error)
+	GetBooksByID(bookIDList []string) ([]*entities.Book, error)
 }
 
 type service struct {
-	repo Repository 
+	repo Repository
 }
 
 func NewService(r Repository) Service {
@@ -25,17 +29,23 @@ func (s *service) InsertBook(book *entities.Book) (*entities.Book, error) {
 }
 
 func (s *service) DeleteBook(bookID string) error {
- 	return s.repo.DeleteBook(bookID)
+	if bookID == "" {
+		return errors.New("book ID cannot be empty")
+	}
+	return s.repo.DeleteBook(bookID)
 }
 
-func (s *service) GetBook(bookID string) (*entities.Book, error)  {
+func (s *service) GetBook(bookID string) (*entities.Book, error) {
+	if bookID == "" {
+		return nil, errors.New("book ID cannot be empty")
+	}
 	return s.repo.GetBook(bookID)
-	
+
 }
 
-func (s *service) GetBooks() ([]*entities.Book, error)  {
+func (s *service) GetBooks() ([]*entities.Book, error) {
 	return s.repo.GetBooks()
 }
-func (s *service) GetBooksByID(bookIdList []string) ([]*entities.Book,error)  {
+func (s *service) GetBooksByID(bookIdList []string) ([]*entities.Book, error) {
 	return s.repo.GetBooksByID(bookIdList)
 }

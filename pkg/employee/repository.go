@@ -38,18 +38,6 @@ func (r *repository) CreateEmployee(employee *entities.Employee) (*entities.Empl
 	if isExistErr != nil || isExist {
 		return nil, isExistErr
 	}
-	if len(employee.EmployeeUsername) < 8 {
-		return nil, errors.New("username should be minimum 8 characters")
-	}
-	if len(employee.EmployeeUsername) > 64 {
-		return nil, errors.New("username should be maximum 64 characters")
-	}
-	if len(employee.EmployeePassword) < 8 {
-		return nil, errors.New("password should be minimum 8 characters")
-	}
-	if len(employee.EmployeePassword) > 64 {
-		return nil, errors.New("password should be maximum 64 characters")
-	}
 
 	for {
 		employeeID = utils.GenerateUniqueID()
@@ -78,14 +66,6 @@ func (r *repository) AuthenticateUser(email, password string) (*entities.Employe
 	var employee entities.Employee
 	query := `SELECT employee_id, employee_mail, employee_username, employee_phone_number, position, employee_password FROM employee WHERE employee_mail = $1 AND employee_password = $2`
 
-	if email == "" {
-		return nil, errors.New("email cannot be null")
-	}
-
-	if password == "" {
-		return nil, errors.New("password cannot be null")
-	}
-
 	err := r.DB.QueryRow(context.Background(), query, email, password).Scan(
 		&employee.EmployeeID,
 		&employee.EmployeeMail,
@@ -106,10 +86,6 @@ func (r *repository) AuthenticateUser(email, password string) (*entities.Employe
 
 func (r *repository) DeleteEmployee(employeeID string) error {
 	query := "DELETE FROM employee WHERE employee_id = $1"
-
-	if employeeID == "" {
-		return errors.New("employee ID cannot be empty")
-	}
 
 	result, err := r.DB.Exec(context.Background(), query, employeeID)
 	if err != nil {

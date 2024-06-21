@@ -116,9 +116,14 @@ func (r *repository) GetStudentByEmail(email string) (*entities.Student, error) 
 func (r *repository) UpdateStudentPassword(studentID, hashedPassword string) error {
 	query := `UPDATE student SET student_password = $1 WHERE student_id = $2`
 
-	_, err := r.DB.Exec(context.Background(), query, hashedPassword, studentID)
+	result, err := r.DB.Exec(context.Background(), query, hashedPassword, studentID)
 	if err != nil {
 		return err
+	}
+
+	rowsAffected := result.RowsAffected()
+	if rowsAffected == 0 {
+		return errors.New("no rows were updated")
 	}
 
 	return nil
