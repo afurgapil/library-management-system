@@ -39,11 +39,18 @@ jobs:
             sleep 3
           done
 
+      - name: Install migrate
+        run: |
+          go install github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+          echo "$GOPATH/bin" >> $GITHUB_PATH
+
       - name: Run database migrations
         run: |
+          # Boş bir Go dosyası oluştur
           echo "package main\n\nimport _ \"github.com/golang-migrate/migrate/v4/database/postgres\"" > dummy.go
+          # Go mod tidy ile bağımlılıkları düzenle
           go mod tidy
-          go install github.com/golang-migrate/migrate/v4/cmd/migrate@latest
           migrate -database "postgres://postgres:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/librarymanagementsystem_test?sslmode=disable" -path migrations/ up
+
       - name: Run tests
         run: go test -v ./... -coverprofile=coverage.txt -covermode=atomic
