@@ -41,8 +41,9 @@ jobs:
 
       - name: Run database migrations
         run: |
+          echo "package main\n\nimport _ \"github.com/golang-migrate/migrate/v4/database/postgres\"" > dummy.go
+          go mod tidy
           go install github.com/golang-migrate/migrate/v4/cmd/migrate@latest
           migrate -database "postgres://postgres:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/librarymanagementsystem_test?sslmode=disable" -path migrations/ up
-
       - name: Run tests
         run: go test -v ./... -coverprofile=coverage.txt -covermode=atomic
