@@ -42,8 +42,8 @@ jobs:
 
       - name: Run database migrations
         run: |
-          chmod +x ./create_migrations.sh
-          ./create_migrations.sh
+          chmod +x ./scripts/create_migrations.sh
+          ./scripts/create_migrations.sh
 
       - name: Run tests
         run: go test -v ./... -coverprofile=coverage.txt -covermode=atomic
