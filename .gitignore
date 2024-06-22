@@ -22,4 +22,5 @@ go.work
 
 /tmp
 .DS_store
-.env
+.env.test
+.env.development
