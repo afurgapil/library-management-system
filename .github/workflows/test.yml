@@ -26,13 +26,14 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: "^1.22.2"
+          go-version: "^1.16"
 
       - name: Install golang-migrate
         run: |
           go get -u -d github.com/golang-migrate/migrate/cmd/migrate
-          cd $GOPATH/pkg/mod/github.com/golang-migrate/migrate@v4.12.2/cmd/migrate
-          go build -tags 'postgres' -ldflags="-X main.Version=$(git describe --tags)" -o $GOPATH/bin/migrate .
+          cd $GOPATH/src/github.com/golang-migrate/migrate/cmd/migrate
+          git checkout $TAG 
+          go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@$TAG
 
       - name: Start PostgreSQL and wait for connection
         run: |
