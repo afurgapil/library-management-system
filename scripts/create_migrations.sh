@@ -1,5 +1,5 @@
 #!/bin/bash
-DATABASE_URL="postgres://postgres:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/librarymanagementsystem_test"
+DATABASE_URL="postgres://postgres:test1234@localhost:5432/librarymanagementsystem_test"
 psql -h localhost -p 5432 -U postgres -d librarymanagementsystem_test -w <"$DATABASE_URL" -c "CREATE TABLE IF NOT EXISTS public.book (
         book_id character varying(255) COLLATE pg_catalog.'default' NOT NULL,
         title character varying(255) COLLATE pg_catalog.'default' NOT NULL,
