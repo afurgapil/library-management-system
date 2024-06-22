@@ -40,10 +40,11 @@ jobs:
             sleep 3
           done
 
+      - name: Make create_migrations.sh executable
+        run: chmod +x scripts/create_migrations.sh
+
       - name: Run database migrations
-        run: |
-          chmod +x ./scripts/create_migrations.sh
-          ./scripts/create_migrations.sh
+        run: ./scripts/create_migrations.sh
 
       - name: Run tests
         run: go test -v ./... -coverprofile=coverage.txt -covermode=atomic
