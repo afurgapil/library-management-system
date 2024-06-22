@@ -39,16 +39,15 @@ jobs:
             sleep 3
           done
 
-      - name: Install migrate
+      - name: Install golang-migrate
         run: |
-          go install github.com/golang-migrate/migrate/v4/cmd/migrate@latest
-          echo "$GOPATH/bin" >> $GITHUB_PATH
+          curl -L https://github.com/golang-migrate/migrate/releases/download/v4.12.2/migrate.linux-amd64.tar.gz | tar xvz
+          sudo mv migrate.linux-amd64 /usr/bin/
+          which migrate
 
       - name: Run database migrations
         run: |
-          # Boş bir Go dosyası oluştur
           echo "package main\n\nimport _ \"github.com/golang-migrate/migrate/v4/database/postgres\"" > dummy.go
-          # Go mod tidy ile bağımlılıkları düzenle
           go mod tidy
           migrate -database "postgres://postgres:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/librarymanagementsystem_test?sslmode=disable" -path migrations/ up
 
