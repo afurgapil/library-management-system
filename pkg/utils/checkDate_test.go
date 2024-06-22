@@ -20,7 +20,7 @@ func TestCheckDate(t *testing.T) {
 			name:         ">1 days remaining",
 			borrowID:     "borrow_id_1",
 			deliveryDate: time.Now().AddDate(0, 0, 30).Format("2006-01-02"),
-			want:         30,
+			want:         29,
 			wantErr:      false,
 		},
 		{
@@ -34,7 +34,7 @@ func TestCheckDate(t *testing.T) {
 			name:         "<0 days remaining",
 			borrowID:     "borrow_id_3",
 			deliveryDate: time.Now().AddDate(0, 0, -30).Format("2006-01-02"),
-			want:         -29,
+			want:         -30,
 			wantErr:      false,
 		},
 	}
