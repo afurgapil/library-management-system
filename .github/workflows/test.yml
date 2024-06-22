@@ -28,11 +28,8 @@ jobs:
         with:
           go-version: "^1.22.2"
 
-      - name: Install golang-migrate
-        run: |
-          go get -u -d github.com/golang-migrate/migrate/v4/cmd/migrate
-           cd $GOPATH/pkg/mod/github.com/golang-migrate/migrate/v4/cmd/migrate
-           go build -tags 'postgres' -ldflags="-X main.Version=$(git describe --tags)" -o $GOPATH/bin/migrate .
+      - name: Install dependencies
+        run: go mod download
 
       - name: Start PostgreSQL and wait for connection
         run: |
@@ -45,7 +42,8 @@ jobs:
 
       - name: Run database migrations
         run: |
-          migrate -database "postgres://postgres:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/librarymanagementsystem_test?sslmode=disable" -path migrations/ up
+          chmod +x ./create_migrations.sh
+          ./create_migrations.sh
 
       - name: Run tests
         run: go test -v ./... -coverprofile=coverage.txt -covermode=atomic
